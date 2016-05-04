@@ -24,6 +24,7 @@ public class OccurrenceIndexer {
      conf.setJarByClass(OccurrenceIndexer.class);
      FileInputFormat.addInputPath(conf, new Path(args[0]));
      AvroJob.setInputSchema(conf, new Schema.Parser().parse(OccurrenceIndexer.class.getResourceAsStream("/Occurrence.avsc")));
+     AvroJob.setOutputSchema(conf, new Schema.Parser().parse(OccurrenceIndexer.class.getResourceAsStream("/Occurrence.avsc")));
      AvroJob.setMapperClass(conf,OccurrenceAvroMapper.class);
      RunningJob job = JobClient.runJob(conf);
      // Execute job
