@@ -21,10 +21,10 @@ public class OccurrenceIndexer {
      conf.set("es.resource", args[2]);
      conf.setOutputFormat(EsOutputFormat.class);
      conf.setMapOutputValueClass(MapWritable.class);
-     conf.setMapperClass(OccurrenceAvroMapper.class);
      conf.setJarByClass(OccurrenceIndexer.class);
      FileInputFormat.addInputPath(conf, new Path(args[0]));
      AvroJob.setInputSchema(conf, new Schema.Parser().parse(OccurrenceIndexer.class.getResourceAsStream("/Occurrence.avsc")));
+     AvroJob.setMapperClass(conf,OccurrenceAvroMapper.class);
      RunningJob job = JobClient.runJob(conf);
      // Execute job
      job.waitForCompletion();

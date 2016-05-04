@@ -5,7 +5,9 @@ import org.gbif.occurrence.avro.model.Occurrence;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.avro.mapred.AvroCollector;
 import org.apache.avro.mapred.AvroKey;
+import org.apache.avro.mapred.AvroMapper;
 import org.apache.hadoop.io.ArrayPrimitiveWritable;
 import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.BooleanWritable;
@@ -20,15 +22,13 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-public class OccurrenceAvroMapper  extends MapReduceBase implements Mapper<AvroKey<Occurrence>, NullWritable, NullWritable, MapWritable> {
+public class OccurrenceAvroMapper  extends AvroMapper<Occurrence, MapWritable> {
 
   @Override
-  public void map(AvroKey<Occurrence> key, NullWritable value, OutputCollector<NullWritable,MapWritable> output,
+  public void map(Occurrence occurrence, AvroCollector<MapWritable> collector,
                   Reporter reporter) throws IOException {
     // create the MapWritable object
     MapWritable doc = new MapWritable();
-
-    Occurrence occurrence = key.datum();
 
     doc.put(new Text("key"), new IntWritable(occurrence.getKey()));
     doc.put(new Text("dataset_key"), new Text(occurrence.getDatasetKey()));
@@ -77,7 +77,7 @@ public class OccurrenceAvroMapper  extends MapReduceBase implements Mapper<AvroK
     doc.put(new Text("scientific_name"), new Text(occurrence.getScientificName()));
     // write the result to the output collector
     // one can pass whatever value to the key; EsOutputFormat ignores it
-    output.collect(NullWritable.get(), doc);
+    collector.collect(doc);
   }
 
   private Writable toArrayWritable(List<String> values) {
