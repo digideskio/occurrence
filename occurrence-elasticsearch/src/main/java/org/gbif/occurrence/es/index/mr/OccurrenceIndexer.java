@@ -20,6 +20,7 @@ public class OccurrenceIndexer {
      conf.setOutputFormat(EsOutputFormat.class);
      conf.setMapOutputValueClass(MapWritable.class);
      conf.setMapperClass(OccurrenceAvroMapper.class);
+     conf.setJarByClass(OccurrenceIndexer.class);
      FileInputFormat.addInputPath(conf, new Path(args[0]));
      RunningJob job = JobClient.runJob(conf);
      // Execute job
