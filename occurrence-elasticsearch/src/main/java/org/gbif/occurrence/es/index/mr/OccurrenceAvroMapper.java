@@ -20,7 +20,7 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-public class OccurrenceAvroMapper  extends MapReduceBase implements Mapper<AvroKey<Occurrence>,NullWritable, NullWritable,MapWritable> {
+public class OccurrenceAvroMapper  extends MapReduceBase implements Mapper<AvroKey<Occurrence>, NullWritable, NullWritable, MapWritable> {
 
   @Override
   public void map(AvroKey<Occurrence> key, NullWritable value, OutputCollector<NullWritable,MapWritable> output,
