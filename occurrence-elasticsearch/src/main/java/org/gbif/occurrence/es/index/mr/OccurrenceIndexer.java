@@ -2,6 +2,8 @@ package org.gbif.occurrence.es.index.mr;
 
 import java.io.IOException;
 
+import org.apache.avro.Schema;
+import org.apache.avro.mapred.AvroJob;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.mapred.FileInputFormat;
@@ -22,6 +24,7 @@ public class OccurrenceIndexer {
      conf.setMapperClass(OccurrenceAvroMapper.class);
      conf.setJarByClass(OccurrenceIndexer.class);
      FileInputFormat.addInputPath(conf, new Path(args[0]));
+     AvroJob.setInputSchema(conf, new Schema.Parser().parse(OccurrenceIndexer.class.getResourceAsStream("Occurrence.avsc")));
      RunningJob job = JobClient.runJob(conf);
      // Execute job
      job.waitForCompletion();
