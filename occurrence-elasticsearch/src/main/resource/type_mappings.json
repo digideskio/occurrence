@@ -1,0 +1,124 @@
+{
+  "mappings": {
+    "occurrence": {
+      "_all": {
+        "enabled": true
+      },
+      "properties": {
+        "key": {
+          "type": "integer"
+        },
+        "dataset_key": {
+          "type": "string"
+        },
+        "institution_code": {
+          "type": "string"
+        },
+        "collection_code": {
+          "type": "string"
+        },
+        "catalog_number": {
+          "type": "string"
+        },
+        "recorded_by": {
+          "type": "string"
+        },
+        "record_number": {
+          "type": "string"
+        },
+        "last_interpreted": {
+          "type": "date",
+          "format": "yyyy-MM-dd'T'HH:mm'Z'"
+        },
+        "taxon_key": {
+          "type": "string"
+        },
+        "kingdom_key": {
+          "type": "integer"
+        },
+        "phylum_key": {
+          "type": "integer"
+        },
+        "class_key": {
+          "type": "integer"
+        },
+        "order_key": {
+          "type": "integer"
+        },
+        "family_key": {
+          "type": "integer"
+        },
+        "genus_key": {
+          "type": "integer"
+        },
+        "subgenus_key": {
+          "type": "integer"
+        },
+        "species_key": {
+          "type": "integer"
+        },
+        "country": {
+          "type": "string"
+        },
+        "continent": {
+          "type": "string"
+        },
+        "publishing_country": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "double"
+        },
+        "longitude": {
+          "type": "double"
+        },
+        "coordinate": {
+          "type": "geo_point"
+        },
+        "year": {
+          "type": "integer"
+        },
+        "month": {
+          "type": "integer"
+        },
+        "event_date": {
+          "type": "date",
+          "format": "yyyy-MM-dd'T'HH:mm'Z'"
+        },
+        "basis_of_record": {
+          "type": "string"
+        },
+        "type_status": {
+          "type": "string"
+        },
+        "spatial_issues": {
+          "type": "boolean"
+        },
+        "has_coordinate": {
+          "type": "boolean"
+        },
+        "elevation": {
+          "type": "integer"
+        },
+        "depth": {
+          "type": "integer"
+        },
+        "establishment_means": {
+          "type": "string"
+        },
+        "occurrence_id": {
+          "type": "string"
+        },
+        "media_type": {
+          "type": "string"
+        },
+        "issue": {
+          "type": "string"
+        },
+        "scientific_name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
