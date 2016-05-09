@@ -4,14 +4,18 @@ import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
-public class StringArrayWritable extends ArrayWritable {
+public class TextArrayWritable extends ArrayWritable {
 
-  public StringArrayWritable() {
+  public TextArrayWritable() {
     super(Text.class);
   }
 
-  public StringArrayWritable(Text[] values) {
+  public TextArrayWritable(Text[] values) {
     super(Text.class, values);
+  }
+
+  public TextArrayWritable(String[] values) {
+    super(values);
   }
 
   public Text[] get() {
