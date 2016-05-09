@@ -7,17 +7,25 @@ import java.io.IOException;
 import org.apache.avro.mapred.AvroJob;
 import org.apache.avro.mapreduce.AvroKeyInputFormat;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
 import org.elasticsearch.hadoop.mr.EsOutputFormat;
 
-public class OccurrenceIndexer {
+public class OccurrenceIndexer extends Configured implements Tool {
 
-   public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
+  public static void main(String[] args) throws Exception {
+    System.exit(ToolRunner.run(new Configuration(), new OccurrenceIndexer(), args));
+  }
+
+  @Override
+  public int run(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
      Configuration conf = new Configuration();
      conf.setBoolean(MRJobConfig.MAP_SPECULATIVE,false);
      conf.set("es.nodes", args[1]);
@@ -42,6 +50,6 @@ public class OccurrenceIndexer {
      FileInputFormat.setInputPaths(job, new Path(args[0]));
 
      // Execute job
-     System.exit(job.waitForCompletion(true) ? 0:1);
+     return (job.waitForCompletion(true) ? 0:1);
    }
 }
