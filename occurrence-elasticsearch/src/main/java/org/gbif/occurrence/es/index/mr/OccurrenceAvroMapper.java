@@ -13,8 +13,12 @@ import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritable, NullWritable,Text> {
+
+  private static final Logger LOG = LoggerFactory.getLogger(OccurrenceAvroMapper.class);
 
   public abstract class MixIn {
     @JsonIgnore abstract Schema getSchema(); // we don't need it!
@@ -35,7 +39,7 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
 
   @Override
   protected void setup(Context context) throws IOException, InterruptedException {
-    System.out.println(System.getenv("CLASSPATH"));
+    LOG.info(System.getenv("CLASSPATH"));
     super.setup(context);
   }
 }
