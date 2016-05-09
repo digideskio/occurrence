@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Strings;
-import org.apache.avro.mapred.AvroWrapper;
+import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
@@ -19,12 +19,12 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OccurrenceAvroMapper  extends Mapper<AvroWrapper<Occurrence>, NullWritable, NullWritable,MapWritable> {
+public class OccurrenceAvroMapper  extends Mapper<AvroKey<Occurrence>, NullWritable, NullWritable,MapWritable> {
 
   private static final Logger LOG = LoggerFactory.getLogger(OccurrenceAvroMapper.class);
 
   @Override
-  public void map(AvroWrapper<Occurrence> occurrenceAvro, NullWritable value, Context context) throws IOException, InterruptedException {
+  public void map(AvroKey<Occurrence> occurrenceAvro, NullWritable value, Context context) throws IOException, InterruptedException {
     // create the MapWritable object
     MapWritable doc = new MapWritable();
     final Occurrence occurrence = occurrenceAvro.datum();
