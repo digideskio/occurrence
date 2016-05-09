@@ -15,24 +15,19 @@ import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.mapred.MapReduceBase;
-import org.apache.hadoop.mapred.Mapper;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapreduce.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OccurrenceAvroMapper  extends MapReduceBase implements
-  Mapper<AvroWrapper<Occurrence>, NullWritable, NullWritable,MapWritable> {
+public class OccurrenceAvroMapper  extends Mapper<AvroWrapper<Occurrence>, NullWritable, NullWritable,MapWritable> {
 
   private static final Logger LOG = LoggerFactory.getLogger(OccurrenceAvroMapper.class);
 
   @Override
-  public void map(AvroWrapper<Occurrence> occurrenceAvro, NullWritable value, OutputCollector<NullWritable,MapWritable> collector,
-                  Reporter reporter) throws IOException {
+  public void map(AvroWrapper<Occurrence> occurrenceAvro, NullWritable value, Context context) throws IOException, InterruptedException {
     // create the MapWritable object
     MapWritable doc = new MapWritable();
-    Occurrence occurrence = occurrenceAvro.datum();
+    final Occurrence occurrence = occurrenceAvro.datum();
     doc.put(new Text("key"), new IntWritable(occurrence.getKey()));
     putIfNotNull(doc,"dataset_key",occurrence.getDatasetKey());
     putIfNotNull(doc,"institution_code",occurrence.getInstitutionCode());
@@ -79,7 +74,7 @@ public class OccurrenceAvroMapper  extends MapReduceBase implements
     putIfNotNull(doc,"establishment_means",occurrence.getEstablishmentMeans());
     putIfNotNull(doc,"occurrence_id",occurrence.getOccurrenceId());
 
-    //putStringArrayWritable(doc, "media_type", occurrence.getMediaType());
+    putStringArrayWritable(doc, "media_type", occurrence.getMediaType());
     putStringArrayWritable(doc, "issue", occurrence.getIssue());
 
     putIfNotNull(doc,"scientific_name",occurrence.getScientificName());
@@ -89,7 +84,7 @@ public class OccurrenceAvroMapper  extends MapReduceBase implements
     for(Map.Entry<Writable,Writable> entry : doc.entrySet()) {
      System.out.println(entry.getKey().toString() + ":" + entry.getValue().toString());
     }
-    collector.collect(NullWritable.get(),doc);
+    context.write(NullWritable.get(),doc);
   }
 
   private static <T> void putIfNotNull(MapWritable doc, String field, String value) {

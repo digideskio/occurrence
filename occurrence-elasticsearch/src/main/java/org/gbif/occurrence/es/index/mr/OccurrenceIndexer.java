@@ -4,41 +4,42 @@ import org.gbif.occurrence.avro.model.Occurrence;
 
 import java.io.IOException;
 
-import org.apache.avro.mapred.AvroInputFormat;
 import org.apache.avro.mapred.AvroJob;
+import org.apache.avro.mapreduce.AvroKeyInputFormat;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.mapred.FileInputFormat;
-import org.apache.hadoop.mapred.JobClient;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.RunningJob;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.MRJobConfig;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.elasticsearch.hadoop.mr.EsOutputFormat;
 
 public class OccurrenceIndexer {
 
-   public static void main(String[] args) throws IOException {
-     JobConf conf = new JobConf();
-     conf.setSpeculativeExecution(false);
+   public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
+     Configuration conf = new Configuration();
+     conf.setBoolean(MRJobConfig.MAP_SPECULATIVE,false);
      conf.set("es.nodes", args[1]);
      conf.set("es.resource", args[2]);
-
-     conf.setJobName("occurrence-es-indexing");
-
-     conf.setInputFormat(AvroInputFormat.class);
      conf.set(AvroJob.INPUT_SCHEMA, Occurrence.getClassSchema().toString());
 
-     conf.setOutputKeyClass(NullWritable.class);
-     conf.setOutputValueClass(MapWritable.class);
+     Job job = Job.getInstance(conf,"occurrence-es-indexing");
 
-     conf.setMapperClass(OccurrenceAvroMapper.class);
-     conf.setOutputFormat(EsOutputFormat.class);
+     job.setInputFormatClass(AvroKeyInputFormat.class);
 
-     conf.setJarByClass(OccurrenceIndexer.class);
-     FileInputFormat.addInputPath(conf, new Path(args[0]));
-     RunningJob job = JobClient.runJob(conf);
+
+     job.setOutputKeyClass(NullWritable.class);
+     job.setOutputValueClass(MapWritable.class);
+
+     job.setMapperClass(OccurrenceAvroMapper.class);
+     job.setOutputFormatClass(EsOutputFormat.class);
+
+     job.setJarByClass(OccurrenceIndexer.class);
+
+     FileInputFormat.setInputPaths(job, new Path(args[0]));
+
      // Execute job
-     job.waitForCompletion();
-     System.exit(0);
+     System.exit(job.waitForCompletion(true) ? 0:1);
    }
 }
