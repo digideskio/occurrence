@@ -80,7 +80,7 @@ public class OccurrenceIndexerTest extends ClusterMapReduceTestCase {
     conf.setOutputValueClass(MapWritable.class);
                          //AvroJob.setOutputSchema(conf, MapWritable.class);
 
-    conf.setMapperClass(OccurrenceAvroMapper.class);
+    //conf.setMapperClass(OccurrenceAvroMapper.class);
 
     conf.setNumMapTasks(1);
     conf.setNumReduceTasks(1);
