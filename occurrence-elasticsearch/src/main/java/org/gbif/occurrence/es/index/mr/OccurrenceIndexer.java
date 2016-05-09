@@ -24,6 +24,7 @@ public class OccurrenceIndexer {
      conf.set("es.resource", args[2]);
      conf.set("es.input.json", "yes");
      conf.set(AvroJob.INPUT_SCHEMA, Occurrence.getClassSchema().toString());
+     conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
 
      Job job = Job.getInstance(conf,"occurrence-es-indexing");
 
