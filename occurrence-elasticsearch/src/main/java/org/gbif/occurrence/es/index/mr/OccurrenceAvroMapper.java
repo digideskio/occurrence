@@ -25,7 +25,7 @@ public class OccurrenceAvroMapper  extends Mapper<AvroKey<Occurrence>, NullWrita
     OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
     OBJECT_MAPPER.configure(SerializationFeature.WRITE_NULL_MAP_VALUES,Boolean.FALSE);
-    OBJECT_MAPPER.addMixIn(Occurrence.class,MixIn.class);
+    OBJECT_MAPPER.addMixInAnnotations(Occurrence.class,MixIn.class);
   }
 
   @Override
