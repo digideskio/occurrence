@@ -8,6 +8,7 @@ import org.apache.avro.mapred.AvroInputFormat;
 import org.apache.avro.mapred.AvroJob;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.MapWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
@@ -27,9 +28,8 @@ public class OccurrenceIndexer {
      conf.setInputFormat(AvroInputFormat.class);
      conf.set(AvroJob.INPUT_SCHEMA, Occurrence.getClassSchema().toString());
 
-     //conf.setOutputKeyClass(NullWritable.class);
-     conf.setMapOutputValueClass(MapWritable.class);
-
+     conf.setOutputKeyClass(NullWritable.class);
+     conf.setOutputValueClass(MapWritable.class);
 
      conf.setMapperClass(OccurrenceAvroMapper.class);
      conf.setOutputFormat(EsOutputFormat.class);
