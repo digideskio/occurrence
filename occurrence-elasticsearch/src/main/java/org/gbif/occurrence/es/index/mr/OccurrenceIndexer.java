@@ -35,6 +35,7 @@ public class OccurrenceIndexer extends Configured implements Tool {
      conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
 
      Job job = Job.getInstance(conf,"occurrence-es-indexing");
+     job.setUserClassesTakesPrecedence(true);
 
      job.setInputFormatClass(AvroKeyInputFormat.class);
 
