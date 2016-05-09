@@ -14,9 +14,9 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class OccurrenceAvroMapper  extends Mapper<AvroKey<Occurrence>, NullWritable, NullWritable,Text> {
+public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritable, NullWritable,Text> {
 
-  abstract class MixIn {
+  public abstract class MixIn {
     @JsonIgnore abstract Schema getSchema(); // we don't need it!
   }
 
