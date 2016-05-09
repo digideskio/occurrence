@@ -33,4 +33,9 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
     context.write(NullWritable.get(),new Text(OBJECT_MAPPER.writeValueAsString(occurrenceAvro.datum())));
   }
 
+  @Override
+  protected void setup(Context context) throws IOException, InterruptedException {
+    System.out.println(System.getenv("CLASSPATH"));
+    super.setup(context);
+  }
 }
