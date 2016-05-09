@@ -26,7 +26,7 @@ public class OccurrenceIndexer extends Configured implements Tool {
 
   @Override
   public int run(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
-     Configuration conf = new Configuration();
+     Configuration conf = getConf();
      conf.setBoolean(MRJobConfig.MAP_SPECULATIVE,false);
      conf.set("es.nodes", args[1]);
      conf.set("es.resource", args[2]);
