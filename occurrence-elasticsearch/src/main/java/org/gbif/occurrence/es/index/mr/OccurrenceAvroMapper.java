@@ -23,8 +23,7 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
   static {
-    OBJECT_MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
-    OBJECT_MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
+    OBJECT_MAPPER.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
   }
 
   @Override
