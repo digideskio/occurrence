@@ -4,10 +4,10 @@ import org.gbif.occurrence.avro.model.Occurrence;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.cloudera.com.fasterxml.jackson.annotation.JsonIgnore;
+import com.cloudera.com.fasterxml.jackson.annotation.JsonInclude;
+import com.cloudera.com.fasterxml.jackson.databind.ObjectMapper;
+import com.cloudera.com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
@@ -28,7 +28,7 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
   static {
     OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-    OBJECT_MAPPER.configure(SerializationFeature.WRITE_NULL_MAP_VALUES,Boolean.FALSE);
+    OBJECT_MAPPER.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, Boolean.FALSE);
     OBJECT_MAPPER.addMixInAnnotations(Occurrence.class,MixIn.class);
   }
 
