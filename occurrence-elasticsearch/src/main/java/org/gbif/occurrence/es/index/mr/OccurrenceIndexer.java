@@ -11,6 +11,7 @@
   import org.apache.hadoop.fs.Path;
   import org.apache.hadoop.io.MapWritable;
   import org.apache.hadoop.io.NullWritable;
+  import org.apache.hadoop.io.Text;
   import org.apache.hadoop.mapreduce.Job;
   import org.apache.hadoop.mapreduce.MRJobConfig;
   import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -41,8 +42,8 @@
        job.setInputFormatClass(AvroKeyInputFormat.class);
 
 
-       job.setOutputKeyClass(NullWritable.class);
-       job.setOutputValueClass(MapWritable.class);
+       job.setMapOutputKeyClass(NullWritable.class);
+       job.setMapOutputValueClass(Text.class);
 
        job.setMapperClass(OccurrenceAvroMapper.class);
        job.setOutputFormatClass(EsOutputFormat.class);
