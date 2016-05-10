@@ -9,9 +9,8 @@ import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.codehaus.jackson.Version;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.Module;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
