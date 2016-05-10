@@ -4,21 +4,19 @@ import org.gbif.occurrence.avro.model.Occurrence;
 
 import java.io.IOException;
 
-import com.cloudera.com.fasterxml.jackson.annotation.JsonIgnore;
-import com.cloudera.com.fasterxml.jackson.annotation.JsonInclude;
-import com.cloudera.com.fasterxml.jackson.databind.ObjectMapper;
-import com.cloudera.com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.codehaus.jackson.Version;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.Module;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritable, NullWritable,Text> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(OccurrenceAvroMapper.class);
 
   public abstract class MixIn {
     @JsonIgnore abstract Schema getSchema(); // we don't need it!
@@ -26,9 +24,24 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
   static {
-    OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-    OBJECT_MAPPER.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, Boolean.FALSE);
+    OBJECT_MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+    OBJECT_MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
+    OBJECT_MAPPER.registerModule(new Module() {
+      @Override
+      public String getModuleName() {
+        return "MixinModules";
+      }
+
+      @Override
+      public Version version() {
+        return Version.unknownVersion();
+      }
+
+      @Override
+      public void setupModule(SetupContext setupContext) {
+        setupContext.setMixInAnnotations(Occurrence.class, MixIn.class);
+      }
+    });
   }
 
   @Override
