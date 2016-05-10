@@ -36,6 +36,7 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
   private static Gson GSON = new GsonBuilder()
                               .excludeFieldsWithModifiers(Modifier.STATIC)
                               .addSerializationExclusionStrategy(new MyExclusionStrategy(Occurrence.class))
+                              .setDateFormat("yyyy-MM-dd'T'HH:mm'Z'")
                               .create();
 
 
