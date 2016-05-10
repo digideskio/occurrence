@@ -26,22 +26,6 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
   static {
     OBJECT_MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
     OBJECT_MAPPER.setSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
-    OBJECT_MAPPER.registerModule(new Module() {
-      @Override
-      public String getModuleName() {
-        return "MixinModules";
-      }
-
-      @Override
-      public Version version() {
-        return Version.unknownVersion();
-      }
-
-      @Override
-      public void setupModule(SetupContext setupContext) {
-        setupContext.setMixInAnnotations(Occurrence.class, MixIn.class);
-      }
-    });
   }
 
   @Override
