@@ -36,12 +36,14 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
   private static Gson GSON = new GsonBuilder()
                               .excludeFieldsWithModifiers(Modifier.STATIC)
                               .addSerializationExclusionStrategy(new MyExclusionStrategy(Schema.class))
-                              .setDateFormat("yyyy-MM-dd'T'HH:mm'Z'")
+                              .setDateFormat("yyyy-MM-dd")
                               .create();
 
 
   @Override
   public void map(AvroKey<Occurrence> occurrenceAvro, NullWritable value, Context context) throws IOException, InterruptedException {
+    System.out.println(occurrenceAvro.datum().toString());
+    System.out.println(GSON.toJson(occurrenceAvro.datum()));
     context.write(NullWritable.get(),new Text(GSON.toJson(occurrenceAvro.datum())));
   }
 

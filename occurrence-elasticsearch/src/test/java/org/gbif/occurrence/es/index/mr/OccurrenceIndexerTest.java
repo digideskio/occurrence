@@ -6,6 +6,8 @@ import org.gbif.occurrence.avro.model.Occurrence;
 import java.io.IOException;
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Date;
+import java.util.TimeZone;
 
 import com.google.common.io.Resources;
 
@@ -174,4 +176,8 @@ public class OccurrenceIndexerTest {
   }
 
 
+  public static void main(String[] args) {
+    System.out.println(TimeZone.getDefault());
+                       System.out.println(new Date(1447835294602l).toString());
+  }
 }

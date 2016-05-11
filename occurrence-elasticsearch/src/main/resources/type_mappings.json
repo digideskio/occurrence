@@ -28,7 +28,7 @@
         },
         "last_interpreted": {
           "type": "date",
-          "format": "yyyy-MM-dd'T'HH:mm'Z'"
+          "format": "yyyy-MM-dd"
         },
         "taxon_key": {
           "type": "string"
@@ -83,7 +83,7 @@
         },
         "event_date": {
           "type": "date",
-          "format": "yyyy-MM-dd'T'HH:mm'Z'"
+          "format": "yyyy-MM-dd"
         },
         "basis_of_record": {
           "type": "string"
