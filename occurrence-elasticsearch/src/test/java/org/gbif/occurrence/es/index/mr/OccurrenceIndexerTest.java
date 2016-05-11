@@ -92,7 +92,7 @@ public class OccurrenceIndexerTest {
 
     conf.setInputFormatClass(AvroKeyInputFormat.class);
     AvroJob.setInputKeySchema(conf, Occurrence.getClassSchema());
-    conf.setMapOutputKeyClass(IntWritable.class);
+    conf.setMapOutputKeyClass(NullWritable.class);
     conf.setMapOutputValueClass(BytesWritable.class);
     conf.setMapperClass(OccurrenceAvroMapper.class);
     conf.setNumReduceTasks(1);
