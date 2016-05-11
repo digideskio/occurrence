@@ -30,7 +30,6 @@
         conf.setBoolean(MRJobConfig.MAP_SPECULATIVE,false);
         conf.set("es.nodes", args[1]);
         conf.set("es.resource", args[2]);
-        conf.set("es.mapping.id", "key");
         conf.set("es.input.json", "yes");
         conf.set(AvroJob.INPUT_SCHEMA, Occurrence.getClassSchema().toString());
         conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
