@@ -5,9 +5,6 @@ import org.gbif.occurrence.avro.model.Occurrence;
 
 import java.io.IOException;
 import java.io.File;
-import java.nio.file.Files;
-import java.util.Date;
-import java.util.TimeZone;
 
 import com.google.common.io.Resources;
 
@@ -86,13 +83,6 @@ public class OccurrenceIndexerTest {
 
     // then
     assertThat(job.isSuccessful()).isTrue();
-
-//    Path[] outputFiles = FileUtil.stat2Paths(getFileSystem().listStatus(outputPath,
- //                                                                       new Utils.OutputFileUtils.OutputFilesFilter()));
-//    assertThat(outputFiles.length).isEqualTo(1);
-
-//    Path outputFile = outputFiles[0];
-//    assertThatAvroOutputIsIdentical("avro/occurrence.avro", outputFile);
   }
 
   private void updateJobConfiguration(Job conf, Path inputPath, Path outputPath) throws IOException {
@@ -107,16 +97,6 @@ public class OccurrenceIndexerTest {
 
     FileInputFormat.setInputPaths(conf, inputPath);
     FileOutputFormat.setOutputPath(conf, outputPath);
-
-    // Disable JDK 7's new bytecode verifier which requires the need for stack frames.  This is required when
-    // running this code via JDK 7.  Otherwise our map/reduce tasks spawned by MiniMRCluster will fail because of
-    // "Error: Expecting a stackmap frame at branch target [...]"
-    //
-    // See also:
-    // http://chrononsystems.com/blog/java-7-design-flaw-leads-to-huge-backward-step-for-the-jvm
-    // http://stackoverflow.com/questions/8958267/java-lang-verifyerror-expecting-a-stackmap-frame
-    //
-    conf.getConfiguration().set("mapred.child.java.opts", "-XX:-UseSplitVerifier");
   }
 
   private void upload(String resourceFile, Path dstPath) throws IOException {
@@ -126,35 +106,9 @@ public class OccurrenceIndexerTest {
     miniDFSCluster.getFileSystem().copyFromLocalFile(KEEP_SRC_FILE, OVERWRITE_EXISTING_DST_FILE, originalInputFile, testInputFile);
   }
 
-  private String fileNameOf(String resourceFile) {
+  private static String fileNameOf(String resourceFile) {
     return new Path(resourceFile).getName();
   }
-
-  private void assertThatAvroOutputIsIdentical(String expectedOutputResourceFile, Path outputFile)
-    throws IOException {
-    LOG.debug("Comparing contents of " + expectedOutputResourceFile + " and " + outputFile);
-    Path expectedOutput = new Path(Resources.getResource(expectedOutputResourceFile).getPath());
-    Path tmpLocalOutput = createTempLocalPath();
-    miniDFSCluster.getFileSystem().copyToLocalFile(outputFile, tmpLocalOutput);
-    try {
-      assertThat(AvroDataComparer.haveIdenticalContents(expectedOutput, tmpLocalOutput)).isTrue();
-    }
-    finally {
-      delete(tmpLocalOutput);
-    }
-  }
-
-  private static Path createTempLocalPath() throws IOException {
-    java.nio.file.Path path = Files.createTempFile("test-tweetcount-actual-output-", ".avro");
-    // delete the temp file immediately -- we are just interested in the generated filename
-    path.toFile().delete();
-    return new Path(path.toAbsolutePath().toString());
-  }
-
-  private static void delete(Path path) throws IOException {
-    new File(path.toString()).delete();
-  }
-
 
   public static void initMiniDFSCluster() throws IOException {
     Configuration conf = new Configuration();
@@ -175,9 +129,4 @@ public class OccurrenceIndexerTest {
     miniMRYarnCluster.start();
   }
 
-
-  public static void main(String[] args) {
-    System.out.println(TimeZone.getDefault());
-                       System.out.println(new Date(1447835294602l).toString());
-  }
 }

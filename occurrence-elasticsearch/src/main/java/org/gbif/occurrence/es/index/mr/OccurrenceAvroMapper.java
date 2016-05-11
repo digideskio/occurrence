@@ -42,8 +42,6 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
 
   @Override
   public void map(AvroKey<Occurrence> occurrenceAvro, NullWritable value, Context context) throws IOException, InterruptedException {
-    System.out.println(occurrenceAvro.datum().toString());
-    System.out.println(GSON.toJson(occurrenceAvro.datum()));
     context.write(NullWritable.get(),new Text(GSON.toJson(occurrenceAvro.datum())));
   }
 
