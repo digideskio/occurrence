@@ -11,13 +11,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.avro.Schema;
 import org.apache.avro.mapred.AvroKey;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritable, IntWritable,Text> {
+public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritable, NullWritable,Text> {
 
   public static class MyExclusionStrategy implements ExclusionStrategy {
     private final Class<?> typeToSkip;
@@ -44,7 +42,7 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
 
   @Override
   public void map(AvroKey<Occurrence> occurrenceAvro, NullWritable value, Context context) throws IOException, InterruptedException {
-    context.write(new IntWritable(occurrenceAvro.datum().getKey()),new Text(GSON.toJson(occurrenceAvro.datum())));
+    context.write(NullWritable.get(),new Text(GSON.toJson(occurrenceAvro.datum())));
   }
 
 }
