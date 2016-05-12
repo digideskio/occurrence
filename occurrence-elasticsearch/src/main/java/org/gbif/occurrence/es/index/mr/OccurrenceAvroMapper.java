@@ -39,10 +39,9 @@ public class OccurrenceAvroMapper extends Mapper<AvroKey<Occurrence>, NullWritab
                               .setDateFormat("yyyy-MM-dd")
                               .create();
 
-
   @Override
   public void map(AvroKey<Occurrence> occurrenceAvro, NullWritable value, Context context) throws IOException, InterruptedException {
-    context.write(NullWritable.get(),new BytesWritable(GSON.toJson(occurrenceAvro.datum()).getBytes()));
+   context.write(NullWritable.get(),new BytesWritable(GSON.toJson(occurrenceAvro.datum()).getBytes()));
   }
 
 }

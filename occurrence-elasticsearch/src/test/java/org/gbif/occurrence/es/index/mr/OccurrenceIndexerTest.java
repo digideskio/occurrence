@@ -15,15 +15,14 @@ import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.MRConfig;
 import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.v2.MiniMRYarnCluster;
+import org.elasticsearch.hadoop.mr.EsOutputFormat;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -75,6 +74,13 @@ public class OccurrenceIndexerTest {
 
     Configuration configuration = miniMRYarnCluster.getConfig();
     configuration.set(MRConfig.MASTER_ADDRESS, "local");
+    configuration.set("es.nodes", "uatsolr-vh.gbif.org");
+    configuration.set("es.port","9200");
+    configuration.set("es.resource", "occurrence/occurrence");
+    configuration.set("es.input.json", "yes");
+    configuration.set(org.apache.avro.mapred.AvroJob.INPUT_SCHEMA, Occurrence.getClassSchema().toString());
+    configuration.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
+    configuration.setBoolean(MRJobConfig.MAPREDUCE_TASK_CLASSPATH_PRECEDENCE, true);
     Job job = Job.getInstance(configuration);
     updateJobConfiguration(job, inputPath, outputPath);
     upload("avro/occurrence.avro", inputPath);
@@ -87,7 +93,7 @@ public class OccurrenceIndexerTest {
     assertThat(job.isSuccessful()).isTrue();
   }
 
-  private void updateJobConfiguration(Job conf, Path inputPath, Path outputPath) throws IOException {
+  private static void updateJobConfiguration(Job conf, Path inputPath, Path outputPath) throws IOException {
     conf.setJobName("occurrence-es-indexing");
 
     conf.setInputFormatClass(AvroKeyInputFormat.class);
@@ -95,6 +101,7 @@ public class OccurrenceIndexerTest {
     conf.setMapOutputKeyClass(NullWritable.class);
     conf.setMapOutputValueClass(BytesWritable.class);
     conf.setMapperClass(OccurrenceAvroMapper.class);
+    conf.setOutputFormatClass(EsOutputFormat.class);
     conf.setNumReduceTasks(1);
 
     FileInputFormat.setInputPaths(conf, inputPath);
