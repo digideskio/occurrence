@@ -4,7 +4,7 @@
 
     import java.io.IOException;
 
-    import org.apache.avro.mapred.AvroJob;
+    import org.apache.avro.mapreduce.AvroJob;
     import org.apache.avro.mapreduce.AvroKeyInputFormat;
     import org.apache.hadoop.conf.Configuration;
     import org.apache.hadoop.conf.Configured;
@@ -32,7 +32,7 @@
         conf.set("es.port", "9200");
         conf.set("es.resource", args[2]);
         conf.set("es.input.json", "yes");
-        conf.set(AvroJob.INPUT_SCHEMA, Occurrence.getClassSchema().toString());
+        //conf.set(AvroJob.INPUT_SCHEMA, Occurrence.getClassSchema().toString());
         conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
         conf.setBoolean(MRJobConfig.MAPREDUCE_TASK_CLASSPATH_PRECEDENCE, true);
 
@@ -40,10 +40,9 @@
         job.setUserClassesTakesPrecedence(true);
 
         job.setInputFormatClass(AvroKeyInputFormat.class);
-
+        AvroJob.setInputKeySchema(job, Occurrence.getClassSchema());
         job.setMapOutputKeyClass(NullWritable.class);
         job.setMapOutputValueClass(BytesWritable.class);
-
         job.setMapperClass(OccurrenceAvroMapper.class);
         job.setOutputFormatClass(EsOutputFormat.class);
 
