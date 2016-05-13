@@ -32,7 +32,7 @@
         conf.set("es.port", "9200");
         conf.set("es.resource", args[2]);
         conf.set("es.input.json", "yes");
-        //conf.set(AvroJob.INPUT_SCHEMA, Occurrence.getClassSchema().toString());
+        conf.set("es.mapping.id", "key");
         conf.setBoolean(MRJobConfig.MAPREDUCE_JOB_USER_CLASSPATH_FIRST, true);
         conf.setBoolean(MRJobConfig.MAPREDUCE_TASK_CLASSPATH_PRECEDENCE, true);
 
