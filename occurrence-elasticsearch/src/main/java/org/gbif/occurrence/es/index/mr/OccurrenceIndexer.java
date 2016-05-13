@@ -28,6 +28,7 @@
       public int run(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
         Configuration conf = getConf();
         conf.setBoolean(MRJobConfig.MAP_SPECULATIVE,false);
+        conf.setBoolean(MRJobConfig.REDUCE_SPECULATIVE, false);
         conf.set("es.nodes", args[1]);
         conf.set("es.port", "9200");
         conf.set("es.resource", args[2]);
