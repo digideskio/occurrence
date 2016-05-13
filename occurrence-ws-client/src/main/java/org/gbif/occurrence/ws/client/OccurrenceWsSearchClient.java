@@ -12,7 +12,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
